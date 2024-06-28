@@ -6,32 +6,31 @@ import Slideshow from "../Components/Slideshow";
 import FreeSlides, { createFreeSlides } from "../Components/FreeSlides";
 import foodInfo from "../Data/FoodInfo";
 import {createRecommendPost} from "../Components/RecommendPost";
+import { Link } from "react-router-dom";
+import { useUserAuth } from '../context/UserAuthContext';
 
-const isLogin = false
-function Home(){
+function Home({isLogin}){
+
+    const {user} = useUserAuth();
+
     return(
         <div>
             <Navbar/>
             <div className="Home__Page">
-                { isLogin ?
-                    <header className="Home__first fredoka">
-                        <h1>Can you cook?<br/>Yes, you can.</h1>
-                        <p>with our community you absolutely can!!</p>
-                        <BtnBox
-                            name = "Log in"
-                            link = "/Login"
-                        />
-                    </header>
+                { user ?
+                <header className="Home__first fredoka">
+                    <h1>Welcome Back<br/>our little chef &lt;3</h1>
+                    <p>How are you doing ? let's cook !</p>
+                </header>
                 :
-                    <header className="Home__first fredoka">
-                        <h1>Welcome Back<br/>our little chef &lt;3</h1>
-                        <p>How are you doing ? let's cook !</p>
-                    </header>
+                <header className="Home__first fredoka">
+                    <h1>Can you cook?<br/>Yes, you can.</h1>
+                    <p>with our community you absolutely can!!</p>
+                    <Link to="/login"><BtnBox name = "Log in"/></Link>
+                </header>
                 }
                 <Slideshow/>
-                {isLogin?
-                null
-                : 
+                {user ?
                 <div className="Home__recommend">
                     <h2 className="noto-sans-thai-looped-semibold">เมนูใหม่ล่าสุดจากเพื่อนของคุณ</h2>
                     <p className="noto-sans-thai-looped-regular">recipes from your followings</p>
@@ -39,6 +38,8 @@ function Home(){
                         {foodInfo.slice(0,6).map(createRecommendPost)}
                     </div>
                 </div>
+                : 
+                    null
                 }
                 <div className="Home__second">
                     <h2 className="noto-sans-thai-looped-semibold">ทำอะไรกินดีจ้า</h2>

@@ -16,7 +16,7 @@ function FormInput (props){
             type={props.type}
             name={props.name}
             placeholder={props.placeholder}
-            onChange={onChange}
+            onChange={props.onChange}
         />
     </div>
     )

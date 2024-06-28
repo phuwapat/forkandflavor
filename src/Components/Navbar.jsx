@@ -3,15 +3,26 @@ import Searchbar from "./Searchbar";
 import BtnLetter from "./BtnLetter";
 import BtnBox from "./BtnBox";
 import { Link, useNavigate } from 'react-router-dom';
-
-const isLogin = true;
+import { useUserAuth } from '../context/UserAuthContext';
 
 function Navbar() {
+
+    const {logOut, user} = useUserAuth();
+
     const navigate = useNavigate();
 
     const navigateToProfile = (view) => {
         navigate('/MyProfile', { state: { view } });
     };
+
+    const handleLogout = async () => {
+        try{
+            await logOut();
+            navigate("/")
+        }catch(err){
+            console.log(err.message)
+        }
+    }
 
     return (
         <div className="Navbar">
@@ -20,7 +31,7 @@ function Navbar() {
             </div>
             <div className="Navbar__Searchbar"><Searchbar /></div>
             {
-                isLogin ?
+                user ?
                     <div className="Navbar__routeLogin">
                         <Link to="/createpost"><img id="Icon__createPost" src="./../../public/Image/Icon/create post.svg" alt="Create Post" /></Link>
                         <img id="Icon__bookmark" src="./../../public/Image/Icon/bookmark.svg" alt="Bookmark" onClick={() => navigateToProfile('bookmark')} />
@@ -30,7 +41,7 @@ function Navbar() {
                         />
                         <BtnLetter
                             name="Log out"
-                            link="/"
+                            onClick={handleLogout}
                         />
                     </div>
                     :
